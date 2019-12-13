@@ -25,31 +25,31 @@ const static struct config dfl_config = {
 #define F(x) (x-1)   /* Hotkey (F1-F10) array index */
 #define U(x) (1u<<x) /* User pin (U0-U2) bitmask */
 
-#if 0
+#if 1
     /* An example configuration for switching ROMs and PAL/NTSC or DF0/DF1:
      *  F1-F4: Switch between ROMs #1-#4 via binary value at pins U1,U0. 
      *  F9:    Switch PAL (or Gotek DF0) via U2 LOW. 
      *  F10:   Switch NTSC (or Gotek DF1) via U2 HIGH. */
 
-    /* U0-U2 are configured open drain and need external pullups. 
-     * Or move U0-U2 out of @user_pin_opendrain and into @user_pin_pushpull. */
-    .user_pin_opendrain = U(2) | U(1) | U(0),
-    .user_pin_pushpull  = 0,
+    /* U0-U2 are configured pushpull and DONT need external pullups.  */
+
+    .user_pin_opendrain  = 0,
+    .user_pin_pushpull = U(2) | U(1) | U(0),
 
     /* ROM #1, Output2 LOW */
-    .user_pin_high      = 0,
+    .user_pin_high      = U(1) | U(0),
 
     .hotkey = {
         /* F1-F4: ROM switching. */
-        [F(1)]  = { .str = "ROM #1",
+        [F(1)]  = { .str = "ROM #1\0Diag ROM",
                     .pin_mod  = U(1) | U(0), },
-        [F(2)]  = { .str = "ROM #2",
+        [F(2)]  = { .str = "ROM #2\0Kickstart 1.3",
                     .pin_mod  = U(1) | U(0),
                     .pin_high =        U(0), },
-        [F(3)]  = { .str = "ROM #3",
+        [F(3)]  = { .str = "ROM #3\0Kickstart 3.0",
                     .pin_mod  = U(1) | U(0),
                     .pin_high = U(1)       , },
-        [F(4)]  = { .str = "ROM #4",
+        [F(4)]  = { .str = "ROM #4\0Kickstart 3.1",
                     .pin_mod  = U(1) | U(0),
                     .pin_high = U(1) | U(0), },
         /* F9-F10: PAL/NTSC, DF0/DF1. */
